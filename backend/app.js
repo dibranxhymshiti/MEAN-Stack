@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const Post = require('./_models/Post');
+const postRoutes = require('./routes/posts')
 const app = express();
 
 mongoose.connect(
@@ -16,29 +16,6 @@ mongoose.connect(
   });
 
 app.use(cors(), bodyParser.json());
-
-
-app.get('/api/posts', (req, res) => {
-  Post.find().then((documents) => {
-    res.status(200).json(documents);
-  })
-});
-
-app.post('/api/posts', (req, res) => {
-  const post = new Post(req.body);
-  post.save().then(result => {
-    res.status(201).json(result);
-  });
-});
-
-app.delete('/api/posts/:id', (req, res) => {
-  Post.deleteOne({_id: req.params.id}).then(response => {
-    console.log(response);
-    res.status(200).json({
-      message: 'Deleted Successfully'
-    })
-  })
-});
-
+app.use('/api/posts', postRoutes);
 
 module.exports = app;

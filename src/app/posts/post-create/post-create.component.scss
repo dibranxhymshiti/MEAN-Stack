@@ -1,7 +1,28 @@
+mat-spinner {
+  margin: auto;
+}
+
 mat-card {
   margin-bottom: 30px;
 
   mat-form-field {
     width: 100%;
+  }
+
+  input[type='file'] {
+    visibility: hidden;
+  }
+
+  .uploadButton {
+    margin-bottom: 20px;
+  }
+
+  .image-preview {
+    height: 250px;
+    margin: 10px 0;
+  }
+
+  .image-preview img {
+    height: 100%;
   }
 }

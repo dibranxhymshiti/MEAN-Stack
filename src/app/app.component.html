@@ -1,7 +1,8 @@
 <mat-toolbar color="primary">
-  <span>MyMessages</span>
+  <a mat-button routerLink="">MyMessages</a>
+  <span class="fill-place"></span>
+  <a mat-button routerLink="/create" routerLinkActive="mat-accent">New Post</a>
 </mat-toolbar>
 <main>
-  <app-post-create></app-post-create>
-  <app-post-list></app-post-list>
+  <router-outlet></router-outlet>
 </main>

@@ -1,10 +1,20 @@
-<mat-card>
-  <mat-form-field>
-    <input type="text" matInput placeholder="Title" [(ngModel)]="title">
-  </mat-form-field>
-  <mat-form-field class="example-full-width">
-    <textarea matInput rows="4" placeholder="Leave a comment" [(ngModel)]="comment"></textarea>
-  </mat-form-field>
+<mat-spinner [diameter]="50" *ngIf="isLoading"></mat-spinner>
+<mat-card *ngIf="!isLoading">
+  <form [formGroup]="postForm" (ngSubmit)="onSavePost()">
+    <mat-form-field>
+      <input type="text" matInput placeholder="Title" formControlName="title">
+    </mat-form-field>
+    <div>
+      <button type="button" class="uploadButton" mat-stroked-button (click)="pickImage.click()">Pick image</button>
+      <input type="file" #pickImage (change)="onImagePicked($event)">
+    </div>
+    <div class="image-preview" *ngIf="imagePreviewSrc !== '' && imagePreviewSrc && postForm.get('image').valid">
+      <img [src]="imagePreviewSrc" [alt]="postForm.value.title">
+    </div>
+    <mat-form-field class="example-full-width">
+      <textarea matInput rows="4" placeholder="Leave a comment" formControlName="comment"></textarea>
+    </mat-form-field>
 
-  <button mat-raised-button color="primary" (click)="addPost()">Post Message</button>
+    <button mat-raised-button color="primary">Save Post</button>
+  </form>
 </mat-card>

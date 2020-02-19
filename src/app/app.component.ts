@@ -6,4 +6,10 @@ import {Component} from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+
+
+  test = {
+    id: 5,
+    name: 20,
+  };
 }
