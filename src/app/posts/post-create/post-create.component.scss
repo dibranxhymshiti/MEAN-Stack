@@ -24,5 +24,8 @@ mat-card {
 
   .image-preview img {
     height: 100%;
+    max-width: 100%;
+    object-position: center;
+    object-fit: cover;
   }
 }

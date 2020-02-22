@@ -16,7 +16,6 @@ export class PostCreateComponent implements OnInit {
 
   private mode = 'create';
   private postID: string;
-  private post: Post;
   imagePreviewSrc: string | ArrayBuffer;
   isLoading = false;
 
@@ -39,11 +38,11 @@ export class PostCreateComponent implements OnInit {
         this.isLoading = true;
         this.postsService.getPost(this.postID).subscribe(response => {
           this.isLoading = false;
-          this.post = response;
-
-          this.postForm.patchValue({
+          this.imagePreviewSrc = response.imagePath;
+          this.postForm.setValue({
             title: response.title,
-            comment: response.comment
+            comment: response.comment,
+            image: response.imagePath
           });
         });
 
@@ -71,12 +70,13 @@ export class PostCreateComponent implements OnInit {
   onSavePost() {
     if (this.postForm.valid) {
       if (this.mode === 'create') {
-        this.postsService.addPosts(this.postForm.value.title, this.postForm.value.comment);
+        this.postsService.addPosts(this.postForm.value.title, this.postForm.value.comment, this.postForm.value.image);
       } else {
         const post: Post = {
           id: this.postID,
           title: this.postForm.value.title,
-          comment: this.postForm.value.comment
+          comment: this.postForm.value.comment,
+          imagePath: this.postForm.value.image
         };
         this.postsService.updatePost(post);
       }

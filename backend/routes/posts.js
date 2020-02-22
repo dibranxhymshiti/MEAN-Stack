@@ -10,9 +10,10 @@ const MIME_TYPE_MAP = {
   'image/jpg': 'jpg',
 };
 
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const isValid = MIME_TYPE_MAP[file.mimeType];
+    const isValid = MIME_TYPE_MAP[file.mimetype];
     let error = new Error('Invalid mime type');
     if (isValid) {
       error = null;
@@ -21,15 +22,34 @@ const storage = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     const name = file.originalname.toLowerCase().split(' ').join('-');
-    const ext = MIME_TYPE_MAP[file.mimeType];
+    const ext = MIME_TYPE_MAP[file.mimetype];
     cb(null, name + '-' + Date.now() + '.' + ext);
   }
 });
 
+const upload = multer({storage: storage});
+
 router.get('', (req, res) => {
-  Post.find().then((documents) => {
-    res.status(200).json(documents);
-  })
+  const postsPerPage = Post.find();
+  const pageSize = +req.query.pageSize;
+  const currentPage = +req.query.page;
+
+  let allDocuments;
+  if (pageSize && currentPage) {
+    postsPerPage.skip(pageSize * (currentPage - 1)).limit(pageSize);
+  }
+
+  postsPerPage
+    .then((documents) => {
+      allDocuments = documents;
+      return Post.countDocuments();
+    })
+    .then(count => {
+      res.status(200).json({
+        posts: allDocuments,
+        postsCount: count
+      })
+    })
 });
 
 router.get('/:id', (req, res) => {
@@ -44,21 +64,39 @@ router.get('/:id', (req, res) => {
   });
 });
 
-router.post('', (req, res) => {
-  const post = new Post(req.body);
-  post.save().then(result => {
-    res.status(201).json(result);
+router.post('', upload.single('image'), (req, res) => {
+  const url = req.protocol + '://' + req.get('host');
+  const post = new Post({
+    title: req.body.title,
+    comment: req.body.comment,
+    imagePath: url + '/images/' + req.file.filename
+  });
+  post.save().then(createdPost => {
+    res.status(201).json({
+      id: createdPost._id,
+      title: createdPost.title,
+      comment: createdPost.comment,
+      imagePath: createdPost.imagePath
+    });
   });
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', upload.single('image'), (req, res) => {
+
   const post = new Post({
     _id: req.params.id,
     title: req.body.title,
-    comment: req.body.comment
+    comment: req.body.comment,
+    imagePath: req.body.imagePath
   });
+
+  if (req.file) {
+    const url = req.protocol + '://' + req.get('host');
+    post.imagePath = url + '/images/' + req.file.filename;
+  }
+
   Post.updateOne({_id: req.params.id}, post).then(result => {
-    res.status(200).json(result);
+    res.status(200).json(post);
   })
 });
 
