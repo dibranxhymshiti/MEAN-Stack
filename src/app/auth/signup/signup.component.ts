@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {NgForm} from '@angular/forms';
+import {AuthService} from '../auth.service';
 
 @Component({
   selector: 'app-signup',
@@ -9,13 +10,16 @@ import {NgForm} from '@angular/forms';
 export class SignupComponent implements OnInit {
   isLoading = false;
 
-  constructor() {
+  constructor(private authService: AuthService) {
   }
 
   ngOnInit(): void {
   }
 
   onSignup(signupForm: NgForm) {
-    console.log(signupForm);
+    if (signupForm.invalid) {
+      return;
+    }
+    this.authService.signUp(signupForm.value);
   }
 }

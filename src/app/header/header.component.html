@@ -1,7 +1,8 @@
 <mat-toolbar color="primary">
   <a mat-button routerLink="">MyMessages</a>
   <span class="fill-place"></span>
-  <a mat-button routerLink="/create" routerLinkActive="mat-accent">New Post</a>
-  <a mat-button routerLink="/login" routerLinkActive="mat-accent">Login</a>
-  <a mat-button routerLink="/signup" routerLinkActive="mat-accent">Signup</a>
+  <a *ngIf="isUserAuthenticated" mat-button routerLink="/create" routerLinkActive="mat-accent">New Post</a>
+  <a *ngIf="!isUserAuthenticated" mat-button routerLink="/login" routerLinkActive="mat-accent">Login</a>
+  <a *ngIf="!isUserAuthenticated" mat-button routerLink="/signup" routerLinkActive="mat-accent">Signup</a>
+  <button *ngIf="isUserAuthenticated" mat-button (click)="onLogout()">Logout</button>
 </mat-toolbar>
