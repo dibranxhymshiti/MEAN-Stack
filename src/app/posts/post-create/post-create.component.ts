@@ -76,7 +76,8 @@ export class PostCreateComponent implements OnInit {
           id: this.postID,
           title: this.postForm.value.title,
           comment: this.postForm.value.comment,
-          imagePath: this.postForm.value.image
+          imagePath: this.postForm.value.image,
+          creator: null
         };
         this.postsService.updatePost(post);
       }

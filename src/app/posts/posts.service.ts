@@ -4,6 +4,9 @@ import {Observable, Subject} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {map} from 'rxjs/operators';
 import {Router} from '@angular/router';
+import {environment} from '../../environments/environment';
+
+const BASE_URL = environment.apiUrl + '/posts';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +21,7 @@ export class PostsService {
 
   getPosts(postsPerPage: number, currentPage: number) {
     const queryParams = `?pageSize=${postsPerPage}&page=${currentPage}`;
-    this.http.get<{ posts: any, postsCount: number }>('http://localhost:3000/api/posts' + queryParams)
+    this.http.get<{ posts: any, postsCount: number }>(BASE_URL + queryParams)
       .pipe(
         map(response => {
           return {
@@ -27,7 +30,8 @@ export class PostsService {
                 id: posts._id,
                 title: posts.title,
                 comment: posts.comment,
-                imagePath: posts.imagePath
+                imagePath: posts.imagePath,
+                creator: posts.creator
               };
             }),
             postsCount: response.postsCount
@@ -45,7 +49,7 @@ export class PostsService {
   }
 
   getPost(id: string): Observable<Post> {
-    return this.http.get<Post>(`http://localhost:3000/api/posts/${id}`);
+    return this.http.get<Post>(`${BASE_URL}/${id}`);
   }
 
   addPosts(title: string, comment: string, image: File) {
@@ -54,7 +58,7 @@ export class PostsService {
     postData.append('comment', comment);
     postData.append('image', image, title);
 
-    this.http.post<Post>('http://localhost:3000/api/posts', postData)
+    this.http.post<Post>(BASE_URL, postData)
       .subscribe(createPost => {
         // IF POST-CREATE AND POST-LIST WERE IN THE SAME COMPONENT, WE HAVE TO UPDATE THE LIST
 
@@ -77,7 +81,7 @@ export class PostsService {
     } else {
       postData = post;
     }
-    this.http.put(`http://localhost:3000/api/posts/${post.id}`, postData).subscribe((response: Post) => {
+    this.http.put(`${BASE_URL}/${post.id}`, postData).subscribe((response: Post) => {
 
       // IF POST-CREATE AND POST-LIST WERE IN THE SAME COMPONENT, WE HAVE TO UPDATE THE LIST
 
@@ -95,6 +99,6 @@ export class PostsService {
   }
 
   deletePost(id: string) {
-    return this.http.delete<{ message: string }>('http://localhost:3000/api/posts/' + id);
+    return this.http.delete<{ message: string }>(`${BASE_URL}/${id}`);
   }
 }

@@ -1,23 +1,43 @@
 import {NgModule} from '@angular/core';
-import {Routes, RouterModule} from '@angular/router';
-import {PostCreateComponent} from './posts/post-create/post-create.component';
-import {PostListComponent} from './posts/post-list/post-list.component';
-import {LoginComponent} from './auth/login/login.component';
-import {SignupComponent} from './auth/signup/signup.component';
+import {PreloadAllModules, RouterModule, Routes} from '@angular/router';
 import {AuthGuard} from './auth/auth.guard';
 
 
 const routes: Routes = [
-  {path: '', component: PostListComponent},
-  {path: 'create', component: PostCreateComponent, canActivate: [AuthGuard]},
-  {path: 'edit/:postID', component: PostCreateComponent, canActivate: [AuthGuard]},
-  {path: 'login', component: LoginComponent},
-  {path: 'signup', component: SignupComponent},
-  {path: '**', redirectTo: '', pathMatch: 'full'}
+
+
+  {
+    path: '',
+    loadChildren: () => import('./posts/post-list/post-list.module').then(m => m.PostListModule)
+  },
+  {
+    path: 'login',
+    loadChildren: () => import('./auth/login/login.module').then(m => m.LoginModule)
+  },
+  {
+    path: 'signup',
+    loadChildren: () => import('./auth/signup/signup.module').then(m => m.SignupModule)
+  },
+  {
+    path: 'create',
+    loadChildren: () => import('./posts/post-create/post-create.module').then(m => m.PostCreateModule),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'edit/:postID',
+    loadChildren: () => import('./posts/post-create/post-create.module').then(m => m.PostCreateModule),
+    canActivate: [AuthGuard]
+  },
+
+  {path: '**', redirectTo: '', pathMatch: 'full'},
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, {
+    preloadingStrategy: PreloadAllModules,
+    initialNavigation: 'enabled',
+    scrollPositionRestoration: 'enabled'
+  })],
   exports: [RouterModule]
 })
 export class AppRoutingModule {
