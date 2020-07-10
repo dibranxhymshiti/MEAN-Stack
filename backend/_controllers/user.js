@@ -42,7 +42,8 @@ exports.loginUser = (req, res) => {
           message: 'Authenticate Failed'
         });
       }
-      const token = jwt.sign({email: currentUser.email, id: currentUser._id},
+      const token = jwt.sign(
+        {email: currentUser.email, id: currentUser._id},
         'secret_this_should_be_longer',
         {expiresIn: '1h'});
 

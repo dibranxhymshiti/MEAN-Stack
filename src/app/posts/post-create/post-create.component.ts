@@ -31,6 +31,10 @@ export class PostCreateComponent implements OnInit {
       image: [null, {validators: [Validators.required], asyncValidators: [mimeType]}]
     });
 
+    this.route.url.subscribe(value => {
+      console.log('value', value);
+    });
+
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       if (paramMap.has('postID')) {
         this.mode = 'edit';

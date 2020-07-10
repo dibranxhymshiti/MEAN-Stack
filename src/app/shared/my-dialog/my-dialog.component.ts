@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 
 @Component({
   selector: 'app-my-dialog',
@@ -7,9 +7,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MyDialogComponent implements OnInit {
 
-  constructor() { }
+  @Input() message: string;
+  @Output() closeModal = new EventEmitter();
+
+  constructor() {
+  }
 
   ngOnInit(): void {
   }
 
+
+  onClose() {
+    this.closeModal.emit();
+  }
 }

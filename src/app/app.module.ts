@@ -17,7 +17,7 @@ import {AngularMaterialModule} from './angular-material.module';
     ErrorComponent,
   ],
   imports: [
-    BrowserModule,
+    BrowserModule.withServerTransition({ appId: 'serverApp' }),
     BrowserAnimationsModule,
     HttpClientModule,
     AppRoutingModule,

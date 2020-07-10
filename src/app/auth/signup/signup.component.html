@@ -9,6 +9,9 @@
       <input matInput ngModel #passwordInput="ngModel" type="password" name="password" placeholder="Password" required>
       <mat-error *ngIf="passwordInput.invalid">Please enter valid password.</mat-error>
     </mat-form-field>
-    <button mat-raised-button color="accent" type="submit">Signup</button>
+    <button mat-raised-button color="accent" type="submit" style="margin-right: 20px">Signup</button>
+    <button mat-raised-button color="warn" type="button" (click)="onShowDialog()">Terms</button>
   </form>
 </mat-card>
+
+<app-my-dialog *ngIf="showDialog" [message]="'Terms of Condition'" (closeModal)="onShowDialog()"></app-my-dialog>

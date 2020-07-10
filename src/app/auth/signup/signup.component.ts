@@ -9,6 +9,7 @@ import {AuthService} from '../auth.service';
 })
 export class SignupComponent implements OnInit {
   isLoading = false;
+  showDialog = false;
 
   constructor(private authService: AuthService) {
   }
@@ -21,5 +22,9 @@ export class SignupComponent implements OnInit {
       return;
     }
     this.authService.signUp(signupForm.value);
+  }
+
+  onShowDialog() {
+    this.showDialog = !this.showDialog;
   }
 }

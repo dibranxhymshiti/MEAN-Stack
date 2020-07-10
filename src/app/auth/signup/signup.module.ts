@@ -5,6 +5,7 @@ import {SignupRoutingModule} from './signup-routing.module';
 import {SignupComponent} from './signup.component';
 import {AngularMaterialModule} from '../../angular-material.module';
 import {FormsModule} from '@angular/forms';
+import {SharedModule} from '../../shared/shared.module';
 
 
 @NgModule({
@@ -12,10 +13,10 @@ import {FormsModule} from '@angular/forms';
     SignupComponent
   ],
   imports: [
-    CommonModule,
     AngularMaterialModule,
     FormsModule,
-    SignupRoutingModule
+    SignupRoutingModule,
+    SharedModule
   ]
 })
 export class SignupModule {

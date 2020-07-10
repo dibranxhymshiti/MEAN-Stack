@@ -88,6 +88,8 @@ export class AuthService {
       this.isAuthenticated = true;
       this.authenticatedListener.next(true);
     }
+
+    console.log('From method in service: ', this.isAuthenticated);
   }
 
   private setAuthTimer(duration: number) {
